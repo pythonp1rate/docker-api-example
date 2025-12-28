@@ -8,6 +8,8 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.coverage
+htmlcov/
 
 # ---- Virtual environments ----
 .env
@@ -18,9 +20,11 @@ ENV/
 env/
 
 # ---- Secrets ----
-*.env
 *.secret
 *.key
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
 
 # ---- OS / Editor junk ----
 .DS_Store
