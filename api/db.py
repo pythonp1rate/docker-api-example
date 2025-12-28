@@ -1,6 +1,6 @@
 # db.py
 import psycopg2
-from exceptions import MovieNotFoundError, UserNotFoundError
+from .exceptions import MovieNotFoundError, UserNotFoundError
 from psycopg2.extras import RealDictCursor
 
 

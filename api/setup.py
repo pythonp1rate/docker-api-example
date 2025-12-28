@@ -1,4 +1,3 @@
-# setup.py
 import os
 
 import psycopg2
@@ -73,7 +72,78 @@ def create_tables():
             cursor.execute(watchlist)
 
 
+def seed_data():
+    """Seed the database with sample data."""
+    con = get_connection()
+
+    genres = [
+        ("Action",),
+        ("Comedy",),
+        ("Drama",),
+        ("Science Fiction",),
+        ("Horror",),
+        ("Romance",),
+    ]
+
+    movies = [
+        ("The Matrix", "1999-03-31", 4),  # Science Fiction
+        ("Die Hard", "1988-07-15", 1),  # Action
+        ("The Shawshank Redemption", "1994-09-23", 3),  # Drama
+        ("Superbad", "2007-08-17", 2),  # Comedy
+        ("The Conjuring", "2013-07-19", 5),  # Horror
+        ("Titanic", "1997-12-19", 6),  # Romance
+        ("Inception", "2010-07-16", 4),  # Science Fiction
+        ("Gladiator", "2000-05-05", 1),  # Action
+    ]
+
+    users = [
+        ("alice",),
+        ("bob",),
+        ("charlie",),
+    ]
+
+    reviews = [
+        (1, 1, 5, "Mind-blowing movie!"),  # alice reviews The Matrix
+        (1, 3, 5, "A masterpiece."),  # alice reviews Shawshank
+        (2, 1, 4, "Great action scenes."),  # bob reviews The Matrix
+        (2, 4, 3, "Pretty funny."),  # bob reviews Superbad
+        (3, 7, 5, "Nolan is a genius."),  # charlie reviews Inception
+    ]
+
+    with con:
+        with con.cursor() as cursor:
+            # Insert genres
+            cursor.executemany(
+                "INSERT INTO genres(name) VALUES(%s) ON CONFLICT (name) DO NOTHING",
+                genres
+            )
+
+            # Insert movies
+            cursor.executemany(
+                """INSERT INTO movies(title, release_date, genre_id)
+                    VALUES(%s, %s, %s) ON CONFLICT (title) DO NOTHING""",
+                movies
+            )
+
+            # Insert users
+            cursor.executemany(
+                "INSERT INTO users(username) VALUES(%s) ON CONFLICT (username) DO NOTHING",
+                users
+            )
+
+            # Insert reviews
+            for review in reviews:
+                cursor.execute(
+                    """INSERT INTO reviews(user_id, movie_id, rating, review_text)
+                        VALUES(%s, %s, %s, %s)
+                        ON CONFLICT DO NOTHING""",
+                    review
+                )
+
+
 if __name__ == "__main__":
     # Only reason to execute this file would be to create new tables, meaning it serves a migration file
     create_tables()
     print("Tables created successfully.")
+    seed_data()
+    print("Sample data seeded successfully.")

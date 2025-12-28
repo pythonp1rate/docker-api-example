@@ -1,7 +1,7 @@
 import sys
 from typing import Any
 
-from db import (
+from .db import (
     create_review_db,
     create_user_db,
     delete_user_db,
@@ -10,10 +10,11 @@ from db import (
     list_users_db,
     update_user_db,
 )
-from exceptions import MovieNotFoundError, UserNotFoundError
+
+from .exceptions import MovieNotFoundError, UserNotFoundError
 from fastapi import Depends, FastAPI, HTTPException, status
-from schemas import ReviewBase, UserIn
-from setup import get_connection
+from .schemas import ReviewBase, UserIn
+from .setup import get_connection
 
 app = FastAPI()
 

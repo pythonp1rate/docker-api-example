@@ -1,2 +1,6 @@
-fastapi[standard]
+fastapi==0.110.*
+uvicorn[standard]==0.29.*
+requests==2.31.*
+python-dotenv==1.0.*
+pydantic==2.6.*
 psycopg2-binary
